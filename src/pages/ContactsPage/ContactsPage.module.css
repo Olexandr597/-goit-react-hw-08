@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #09518d;
+  background-color: #e6f4ff;
 }
 .subtitle {
   color: #fff;
