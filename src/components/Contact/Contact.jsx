@@ -1,36 +1,48 @@
-import { deleteContact } from "../../redux/contacts/operations";
-import css from "./Contact.module.css";
-import { useDispatch } from "react-redux";
-import spriteUrl from "../../assets/symbol-defs.svg"
+import { useDispatch } from 'react-redux';
+import css from './Contact.module.css';
+import { ImUser, ImMobile } from 'react-icons/im';
+import { setCurrentContact } from '../../redux/contacts/slice';
 
-const Contact = ({ contact }) => {
+const Contact = ({ name, phone, id, openModalDelete, openModalEdit }) => {
   const dispatch = useDispatch();
-
-  const onDeleteContact = () => {
-    dispatch(deleteContact(contact.id));
+  const currentContact = {
+    id,
+    name,
+    phone,
   };
+  const handleBtnDelete = () => {
+    dispatch(setCurrentContact(currentContact));
 
+    openModalDelete();
+  };
+  const handleBtnEdit = () => {
+    dispatch(setCurrentContact(currentContact));
+
+    openModalEdit();
+  };
   return (
-    <div className={css.contactCard}>
-      <div>
-        <p className={css.contactName}>
-          <svg className={css.contactSVG} width="20" height="20">
-            <use href={`${spriteUrl}#icon-user`}></use>
-          </svg>{" "}
-          {contact.name}
+    <div className={css.contactBox}>
+      <span>
+        <p className={css.name}>
+          <ImUser className={css.icon} />
+          {name}
         </p>
-        <p className={css.contactNumber}><svg className={css.contactSVG} width="20" height="20">
-            <use href={`${spriteUrl}#icon-phone`}></use>
-          
-          </svg> {contact.number}</p>
-      </div>
-      <div>
-        <button className={css.contactDelete} onClick={onDeleteContact}>
-          <svg className={css.contactBin} width="24" height="24">
-            <use href={`${spriteUrl}#icon-bin`}></use>
-          </svg>
-        </button>
-      </div>
+        <p className={css.number}>
+          <ImMobile className={css.icon} /> {phone}
+        </p>
+      </span>
+      <ul className={css.list_btn}>
+        <li>
+          <button className={css.btn} type="button" onClick={handleBtnEdit}>
+            Edit name
+          </button>
+        </li>
+        <li>
+          <button className={css.btn} type="button" onClick={handleBtnDelete}>
+            Delete
+          </button>
+        </li>
+      </ul>
     </div>
   );
 };

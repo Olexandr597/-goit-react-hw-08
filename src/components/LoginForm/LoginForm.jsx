@@ -1,71 +1,47 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import css from "./LoginForm.module.css";
-import { login } from "../../redux/auth/operations";
-import { useDispatch } from "react-redux";
-
-const initialState = {
-  email: "",
-  password: "",
-};
-
-const registerSchema = Yup.object({
-  email: Yup.string().required("Required").email("Enter a valid email"),
-  password: Yup.string()
-    .required("Required")
-    .min(7, "Password is too Short!")
-    .max(50, "Password is too Long!"),
-});
-
-
+import { Form, Formik, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import css from './LoginForm.module.css';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux/auth/operations';
 const LoginForm = () => {
+  const initialLoginValues = {
+    email: '',
+    password: '',
+  };
   const dispatch = useDispatch();
   const handleSubmit = (values, actions) => {
+    console.log(values);
     dispatch(login(values));
     actions.resetForm();
   };
+  // validation schema
+  const LoginFormSchema = Yup.object().shape({
+    email: Yup.string().required('Required').email('Invalid email'),
+    password: Yup.string().required('Required'),
+  });
   return (
-    <Formik
-      initialValues={initialState}
-      validationSchema={registerSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form className={css.form}>
-        <label className={css.formTitle}>
-          Let&rsquo;s connect constellations!</label>
-          <br />
-          <br />
-        <label>
-          <br />
-          <span>Email:</span>
-          <br />
-          <Field className={css.inputData} type="email" name="email" />
-          <br />
-          <ErrorMessage
-            className={css.message}
-            component="span"
-            name="email"
-          ></ErrorMessage>
-        </label>
-        <br />
-        <label>
-          <span>Password:</span>
-          <br />
-          <Field className={css.inputData} type="password" name="password" />
-          <br />
-          <ErrorMessage
-            className={css.message}
-            component="span"
-            name="password"
-          ></ErrorMessage>
-        </label>
-        <br />
-        <button className={css.loginBtn} type="submit">
-          Go to account ✨
-        </button>
-      </Form>
-    </Formik>
-  )
-}
+    <div className={css.container}>
+      <Formik
+        initialValues={initialLoginValues}
+        onSubmit={handleSubmit}
+        validationSchema={LoginFormSchema}
+      >
+        <Form>
+          <label>
+            <span className={css.form_title}>Email</span>
+            <Field type="email" name="email" placeholder="example@mail.com"></Field>
+            <ErrorMessage name="email" component="span" className={css.errorMessage} />
+          </label>
+          <label>
+            <span className={css.form_title}>Password</span>
+            <Field type="password" name="password"></Field>
+            <ErrorMessage name="password" component="span" className={css.errorMessage} />
+          </label>
+          <button type="submit">Log In</button>
+        </Form>
+      </Formik>
+    </div>
+  );
+};
 
-export default LoginForm
+export default LoginForm;

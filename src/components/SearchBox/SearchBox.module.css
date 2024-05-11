@@ -1,19 +1,24 @@
-.findCotact {
+::placeholder {
+  color: #646cff;
+}
+.searchInput {
+  width: 400px;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  outline: none;
   font-size: 20px;
-  margin: 20px auto 10px auto;
-  text-align: center;
+  border-color: #646cff;
 }
-
-.inputCotact {
-  width: 350px;
-  height: 42px;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 5px;
-  color: #ffffffde;
-  background: rgba(177, 177, 243, 0.16);
+.searchBox {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-
-.findCotact {
-  margin: 10px auto;
+.subtitle {
+  color: white;
+  font-size: 24px;
+  padding: 10px 20px;
 }

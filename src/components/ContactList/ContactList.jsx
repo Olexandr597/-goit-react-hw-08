@@ -1,24 +1,25 @@
-import { selectFilteredContacts } from "../../redux/contacts/selectors";
-import Contact from "../Contact/Contact";
-import { useSelector } from "react-redux";
-import css from './ContactList.module.css'
+import { useSelector } from 'react-redux';
+import Contact from '../Contact/Contact';
 
-const ContactList = () => {
-  
-  const filteredContacts = useSelector(selectFilteredContacts);
+import css from './ContactList.module.css';
+import { selectFilteredContacts } from '../../redux/contacts/selectors';
 
+const ContactList = ({ openModalDelete, openModalEdit }) => {
+  const filteredContacs = useSelector(selectFilteredContacts);
   return (
-    <div className={css.contactList}>
-      <ul >
-        {filteredContacts && filteredContacts.length === 0 && (<li className={css.notContact}>You have not any contacts </li>)}
-        {filteredContacts &&
-          filteredContacts.map((contact) => (
-            <li key={contact.id}>
-              <Contact contact={contact} />
-            </li>
-          ))}
-      </ul>
-    </div>
+    <ul className={css.contactList}>
+      {filteredContacs.map(contact => (
+        <li className={css.contackItem} key={contact.id}>
+          <Contact
+            name={contact.name}
+            phone={contact.number}
+            id={contact.id}
+            openModalDelete={openModalDelete}
+            openModalEdit={openModalEdit}
+          />
+        </li>
+      ))}
+    </ul>
   );
 };
 

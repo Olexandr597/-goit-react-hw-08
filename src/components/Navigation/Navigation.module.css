@@ -1,20 +1,14 @@
-.navLinkItem {
+.nav_menu {
+  display: flex;
+  align-items: center;
+}
+
+.link {
   text-decoration: none;
-  text-transform: uppercase;
-  font-weight: 500;
+  color: white;
+  margin-right: 20px;
 }
 
 .active {
-  font-weight: 700;
-  font-size: 18px;
-  color: rgba(2, 0, 36, 1);
   text-decoration: underline;
-  text-transform: uppercase;
-}
-
-.navLinks {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 60px;
 }

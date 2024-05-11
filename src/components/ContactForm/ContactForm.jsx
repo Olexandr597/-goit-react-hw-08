@@ -1,57 +1,71 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Form, Formik, Field, ErrorMessage } from 'formik';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import css from './ContactForm.module.css'
-import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contacts/operations";
+import toast from 'react-hot-toast';
 
-const initialState = {
-  name: "",
-  number: "",
-}
+import css from './ContactForm.module.css';
+import { addContact } from '../../redux/contacts/operations';
 
-const contactSchema = Yup.object({
-  name: Yup.string()
-    .required("Required")
-    .min(3, "Name is too Short!")
-    .max(50, "Name is too Long!"),
-  number:Yup.string()
-    .required("Required")
-    .min(3, "Number is too Short!")
-    .max(50, "Number is too Long!"),
-});
-
-const ContactForm = () => {
+const ContactForm = ({ onSubmit }) => {
+  const initialContactValues = {
+    name: '',
+    number: '',
+  };
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    const finalContact = {...values};
-    dispatch(addContact(finalContact));
-    actions.resetForm();
-}
- 
-  return (
-    <Formik initialValues={initialState} validationSchema={contactSchema} onSubmit={handleSubmit}>
-      <Form className={css.form}>
-        <label>
-          <span>Name:</span>
-          <br />
-          <Field className={css.inputData} type="text" name="name" />
-          <br />
-          <ErrorMessage className={css.message} component='span' name="name"></ErrorMessage>
-        </label>
-        <label>
-          <br />
-          <span>Number:</span>
-          <br />
-          <Field className={css.inputData} type="tel" name="number" />
-          <br />
-          <ErrorMessage className={css.message} component='span' name="number"></ErrorMessage>
-       </label>
-				<br />
-        <button className={css.addBtn} type="submit">Add contact</button>
-      </Form>
-    </Formik>
-  )
-}
+    const newContact = values;
+    dispatch(addContact(newContact));
+    onSubmit();
+    toast.success('New contact added');
 
-export default ContactForm
+    actions.resetForm();
+  };
+
+  // validation schema
+  const FeedbackSchema = Yup.object().shape({
+    name: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Required').trim(),
+    number: Yup.string()
+      .matches(/^\d{3}-\d{3}-\d{4}$/g, 'The number format must be xxx-xxx-xxxx')
+      .required('Required')
+      .trim(),
+  });
+
+  return (
+    <div>
+      <div className={css.close_btn}>
+        <button
+          type="button"
+          onClick={() => {
+            onSubmit();
+          }}
+        >
+          ✖️
+        </button>
+      </div>
+      <Formik
+        initialValues={initialContactValues}
+        onSubmit={handleSubmit}
+        validationSchema={FeedbackSchema}
+      >
+        <Form className={css.form}>
+          <label className={css.form_input}>
+            <span>Name</span>
+            <Field type="text" name="name" placeholder="Name Surname"></Field>
+            <ErrorMessage name="name" component="span" />
+          </label>
+          <label className={css.form_input}>
+            <span>Number</span>
+            <Field type="tel" name="number" placeholder="111-222-3333"></Field>
+            <ErrorMessage name="number" component="span" />
+          </label>
+          <button className={css.form_btn} type="submit">
+            Create new contact
+          </button>
+        </Form>
+      </Formik>
+    </div>
+  );
+};
+
+export default ContactForm;
